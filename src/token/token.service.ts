@@ -5,7 +5,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {JwtService} from '@nestjs/jwt';
-import {AuthRefreshDto} from "../authorizhation/dto/auth.dto";
 import {ConfigService} from "@nestjs/config";
 
 export interface ITokens {
@@ -21,8 +20,11 @@ export class TokenService {
                 private config?: ConfigService) {
     }
 
-    public async createToken(payloadData: object, secretKey: string, timeExpire: string): Promise<string> {
+    private async _createToken(payloadData: object, secretKey: string, timeExpire: string): Promise<string> {
         return this.jwtService.sign(payloadData, {secret: secretKey, expiresIn: timeExpire})
+    }
+    public async createToken(payloadData: object): Promise<string> {
+        return this._createToken(payloadData,  this.config.get("SECRET_KEY_REFRESH_JWT"), '30d')
     }
 
     public verify(token: string): { userId: number } | HttpException {

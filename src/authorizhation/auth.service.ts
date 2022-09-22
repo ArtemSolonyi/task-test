@@ -60,7 +60,7 @@ export class AuthService {
             })
             findUser = await this.userRepository.save(createUser)
         }
-        const token = await this.tokenService.createToken({userId: findUser.id}, this.config.get("SECRET_KEY_REFRESH_JWT"), '30d')
+        const token = await this.tokenService.createToken({userId: findUser.id})
         const templateCount = await this.templateRepository.count({where: {templateId: body.templateId}})
         return [{
             metadata: {
