@@ -28,12 +28,14 @@ export class AuthService {
             const template = await this.templateRepository.createQueryBuilder('template')
                 .where("template.templateId = :template", {template: body.templateId})
                 .orderBy({
-                        'template.dClient': query.sort?.dClient! == undefined ? 'DESC' : query.sort?.dClient!,
                         'template.tClient': query.sort?.tClient! == undefined ? 'DESC' : query.sort?.tClient!,
                     }
                 )
             if (query.conditions?.dClient) {
                 template.andWhere('template.dClient >=:dClient', {dClient: new Date(query.conditions.dClient.greatestEqual)})
+            }
+            if (query.sort?.tClient) {
+                template.addOrderBy('template.dClient', query.sort?.dClient! == undefined ? 'DESC' : query.sort?.dClient!)
             }
             const templateCount = await this.templateRepository.count({where: {templateId: body.templateId}})
             return {

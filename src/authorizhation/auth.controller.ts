@@ -16,4 +16,5 @@ export class AuthController {
     private async getTemplate(@Param() param: { templateId: string }, @Query() query: IQuery) {
         return await this.authService.getTemplate({templateId: +param.templateId}, query)
     }
+
 }

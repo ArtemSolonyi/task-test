@@ -10,7 +10,7 @@ export class Template {
     blockType: string
     @Column({select:false})
     templateId:number
-    @Column()
+    @Column({select:false})
     pointId: number
     @Column()
     pointNameNts: number
